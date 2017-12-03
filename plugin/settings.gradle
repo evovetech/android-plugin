@@ -1,0 +1,4 @@
+pluginManagement {
+    apply from: '../gradle/settings.gradle'
+    app.configurePlugins(it)
+}

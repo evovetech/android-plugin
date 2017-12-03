@@ -1,0 +1,4 @@
+apply from: 'gradle/settings.gradle'
+
+includeBuild('sample')
+includeBuild('plugin')

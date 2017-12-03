@@ -1,0 +1,77 @@
+import org.gradle.plugin.management.PluginManagementSpec
+
+ext.app = loadApp()
+app.plugins = [
+        "org.jetbrains.kotlin"   : [
+                version: app.kotlinVersion
+        ],
+        "com.android.application": [
+                module : "com.android.tools.build:gradle",
+                version: app.androidGradleVersion
+        ]
+]
+app.configurePlugins = { PluginManagementSpec plug ->
+    Closure cl = {
+        repositories {
+            gradlePluginPortal()
+            maven { url "https://maven.google.com/" }
+            maven { url "https://jcenter.bintray.com/" }
+        }
+        resolutionStrategy {
+            eachPlugin {
+                println("requested: ${requested}")
+                def reqId = requested.id.id
+                app.plugins.find { String key, Map value ->
+                    if (reqId.contains(key)) {
+                        def module = value.get("module", null)
+                        def version = value.get("version", null)
+                        if (module && version) {
+                            useModule("${module}:${version}")
+                        } else if (module) {
+                            useModule("${module}:${requested.version}")
+                        } else if (version) {
+                            useVersion(version)
+                        }
+                        return true
+                    }
+                    return false
+                }
+                println("target: ${target}")
+            }
+        }
+    }
+    cl.delegate = plug
+    cl(plug)
+}
+
+gradle.rootProject { p ->
+    settings.ext.properties.each { prop ->
+        p.ext."${prop.key}" = prop.value
+    }
+    group = app.group
+    version = app.version
+}
+
+gradle.beforeProject { p ->
+    p.repositories {
+        google()
+        jcenter()
+    }
+}
+
+def loadApp() {
+    def appPrefix = 'app.'
+    def app = new Expando()
+    def props = new Properties()
+    props.load(file('../gradle.properties').newReader())
+    props.each { prop ->
+        def thing = ext
+        def key = prop.key as String
+        if (key.startsWith(appPrefix)) {
+            key = key.substring(appPrefix.length())
+            thing = app
+        }
+        thing."${key}" = prop.value
+    }
+    return app
+}
