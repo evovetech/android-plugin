@@ -2,7 +2,15 @@ import org.gradle.plugin.management.PluginManagementSpec
 
 ext.app = loadApp()
 app.plugins = [
-        "org.jetbrains.kotlin"   : [
+        "org.jetbrains.kotlin": [
+                version: app.kotlinVersion
+        ],
+        "kotlin-android": [
+                module: app.kotlinModule,
+                version: app.kotlinVersion
+        ],
+        "kotlin-android-": [
+                module: app.kotlinModule,
                 version: app.kotlinVersion
         ],
         "com.android.application": [
