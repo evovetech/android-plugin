@@ -14,7 +14,12 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-                message.setText(R.string.title_dashboard)
+                val user = User.getOrCreate("laynepenney@gmail.com") {
+                    firstName = "Layne"
+                    lastName = "Penney"
+                }
+                val text = getString(R.string.title_dashboard) + "\n\nUser: " + user.toString()
+                message.text = text
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
@@ -28,7 +33,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 }
