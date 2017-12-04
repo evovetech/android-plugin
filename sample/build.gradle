@@ -2,7 +2,8 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-android-extensions")
-    kotlin("kapt")
+    id("kotlin-kapt")
+    id("realm-android")
 }
 
 android {
@@ -17,18 +18,15 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
+        release {
+            minifyEnabled false
             proguardFiles("proguard-rules.pro")
         }
     }
 }
 
-val app: groovy.util.Expando by extra
-val kotlinVersion = app.getProperty("kotlinVersion")!!
-
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jre7:${app.kotlinVersion}")
     implementation("com.android.support:appcompat-v7:26.1.0")
     implementation("com.android.support:design:26.1.0")
     implementation("com.android.support.constraint:constraint-layout:1.0.2")

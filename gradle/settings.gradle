@@ -2,20 +2,17 @@ import org.gradle.plugin.management.PluginManagementSpec
 
 ext.app = loadApp()
 app.plugins = [
-        "org.jetbrains.kotlin": [
-                version: app.kotlinVersion
-        ],
-        "kotlin-android": [
-                module: app.kotlinModule,
-                version: app.kotlinVersion
-        ],
-        "kotlin-android-": [
-                module: app.kotlinModule,
+        "kotlin"                 : [
+                module : app.kotlinModule,
                 version: app.kotlinVersion
         ],
         "com.android.application": [
                 module : "com.android.tools.build:gradle",
                 version: app.androidGradleVersion
+        ],
+        "realm"                  : [
+                module : app.realmModule,
+                version: app.realmVersion
         ]
 ]
 app.configurePlugins = { PluginManagementSpec plug ->
@@ -30,7 +27,7 @@ app.configurePlugins = { PluginManagementSpec plug ->
                 println("requested: ${requested}")
                 def reqId = requested.id.id
                 app.plugins.find { String key, Map value ->
-                    if (reqId.contains(key)) {
+                    if (reqId.startsWith(key)) {
                         def module = value.get("module", null)
                         def version = value.get("version", null)
                         if (module && version) {
