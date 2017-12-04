@@ -1,4 +1,0 @@
-task wrapper(type: Wrapper) {
-    gradleVersion app.gradleVersion
-    distributionType 'all'
-}

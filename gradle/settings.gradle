@@ -50,6 +50,11 @@ gradle.rootProject { p ->
     }
     group = app.group
     version = app.version
+
+    task wrapper(type: Wrapper) {
+        gradleVersion app.gradleVersion
+        distributionType 'all'
+    }
 }
 
 gradle.beforeProject { p ->

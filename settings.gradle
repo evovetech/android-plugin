@@ -1,4 +1,7 @@
-apply from: 'gradle/settings.gradle'
+pluginManagement {
+    apply from: 'gradle/settings.gradle'
+    app.configurePlugins(it)
+}
 
 includeBuild('sample')
 includeBuild('plugin')
