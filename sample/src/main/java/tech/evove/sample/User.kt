@@ -10,6 +10,7 @@ open class User : RealmObject() {
     var lastName: String? = null
 
     companion object {
+        @Throws(Throwable::class)
         inline fun getOrCreate(email: String, init: User.() -> Unit): User {
             return realm().getOrCreate({
                 equalTo("email", email)
